@@ -1,24 +1,48 @@
 import clsx from 'clsx'
 import lettersArray from '../assets/letters'
+import { useEffect, useState } from 'react'
 
 interface Props {
   className?: string
   letter: string
+  isEmpty?: boolean
 }
 
 interface SegmentsRowProps {
   segmentsArray: any[]
+  flashing?: boolean
 }
 
 interface SegmentProps {
   on: boolean
+  flashing?: boolean
 }
 
-export const Digit = ({ className, letter }: Props) => {
+export const Digit = ({ className, letter, isEmpty = false }: Props) => {
+  const [flashing, setFlashing] = useState(isEmpty)
+
+  useEffect(() => {
+    const first = setInterval(() => {
+      setFlashing((flashing) => !flashing)
+    }, 500)
+
+    return () => clearInterval(first)
+  }, [])
+
   return (
     <>
       <div className={clsx(className, 'flex flex-col gap-[0.5px]')}>
-        {Object.keys(lettersArray).includes(letter) ? (
+        {isEmpty ? (
+          <>
+            <SegmentsRow segmentsArray={[]} />
+            <SegmentsRow segmentsArray={[]} />
+            <SegmentsRow segmentsArray={[]} />
+            <SegmentsRow segmentsArray={[]} />
+            <SegmentsRow segmentsArray={[]} />
+            <SegmentsRow segmentsArray={[]} />
+            <SegmentsRow segmentsArray={[1, 2, 3, 4, 5]} flashing={flashing} />
+          </>
+        ) : Object.keys(lettersArray).includes(letter) ? (
           <>
             <SegmentsRow segmentsArray={lettersArray[letter][0] || []} />
             <SegmentsRow segmentsArray={lettersArray[letter][1] || []} />
@@ -44,20 +68,25 @@ export const Digit = ({ className, letter }: Props) => {
   )
 }
 
-export const SegmentsRow = ({ segmentsArray = [] }: SegmentsRowProps) => {
+export const SegmentsRow = ({
+  segmentsArray = [],
+  flashing,
+}: SegmentsRowProps) => {
   return (
     <div className="flex gap-[0.5px]">
-      <Segment on={segmentsArray.includes(1)} />
-      <Segment on={segmentsArray.includes(2)} />
-      <Segment on={segmentsArray.includes(3)} />
-      <Segment on={segmentsArray.includes(4)} />
-      <Segment on={segmentsArray.includes(5)} />
+      <Segment on={segmentsArray.includes(1)} flashing={flashing} />
+      <Segment on={segmentsArray.includes(2)} flashing={flashing} />
+      <Segment on={segmentsArray.includes(3)} flashing={flashing} />
+      <Segment on={segmentsArray.includes(4)} flashing={flashing} />
+      <Segment on={segmentsArray.includes(5)} flashing={flashing} />
     </div>
   )
 }
 
-export const Segment = ({ on }: SegmentProps) => {
+export const Segment = ({ on, flashing }: SegmentProps) => {
   return (
-    <div className={clsx('w-2 h-2', on ? 'bg-white' : 'bg-gray-800')}></div>
+    <div
+      className={clsx('w-2 h-2', on && !flashing ? 'bg-white' : 'bg-gray-800')}
+    ></div>
   )
 }
