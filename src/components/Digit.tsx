@@ -31,7 +31,9 @@ export const Digit = ({ className, letter, isEmpty = false }: Props) => {
 
   return (
     <>
-      <div className={clsx(className, 'flex flex-col gap-[0.5px]')}>
+      <div
+        className={clsx(className, 'flex flex-col gap-[0.5px] max-md:gap-0')}
+      >
         {isEmpty ? (
           <>
             <SegmentsRow segmentsArray={[]} />
@@ -44,13 +46,13 @@ export const Digit = ({ className, letter, isEmpty = false }: Props) => {
           </>
         ) : Object.keys(lettersArray).includes(letter) ? (
           <>
-            <SegmentsRow segmentsArray={lettersArray[letter][0] || []} />
-            <SegmentsRow segmentsArray={lettersArray[letter][1] || []} />
-            <SegmentsRow segmentsArray={lettersArray[letter][2] || []} />
-            <SegmentsRow segmentsArray={lettersArray[letter][3] || []} />
-            <SegmentsRow segmentsArray={lettersArray[letter][4] || []} />
-            <SegmentsRow segmentsArray={lettersArray[letter][5] || []} />
-            <SegmentsRow segmentsArray={lettersArray[letter][6] || []} />
+            <SegmentsRow segmentsArray={lettersArray[letter][0]} />
+            <SegmentsRow segmentsArray={lettersArray[letter][1]} />
+            <SegmentsRow segmentsArray={lettersArray[letter][2]} />
+            <SegmentsRow segmentsArray={lettersArray[letter][3]} />
+            <SegmentsRow segmentsArray={lettersArray[letter][4]} />
+            <SegmentsRow segmentsArray={lettersArray[letter][5]} />
+            <SegmentsRow segmentsArray={lettersArray[letter][6]} />
           </>
         ) : (
           <>
@@ -73,7 +75,7 @@ export const SegmentsRow = ({
   flashing,
 }: SegmentsRowProps) => {
   return (
-    <div className="flex gap-[0.5px]">
+    <div className="flex gap-[0.5px] max-md:gap-0">
       <Segment on={segmentsArray.includes(1)} flashing={flashing} />
       <Segment on={segmentsArray.includes(2)} flashing={flashing} />
       <Segment on={segmentsArray.includes(3)} flashing={flashing} />
@@ -86,7 +88,10 @@ export const SegmentsRow = ({
 export const Segment = ({ on, flashing }: SegmentProps) => {
   return (
     <div
-      className={clsx('w-2 h-2', on && !flashing ? 'bg-white' : 'bg-gray-800')}
+      className={clsx(
+        'w-2 h-2 max-md:w-1 max-md:h-1',
+        on && !flashing ? 'bg-lime-400' : 'bg-gray-950',
+      )}
     ></div>
   )
 }
